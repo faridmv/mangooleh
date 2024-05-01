@@ -207,10 +207,13 @@ class DownloadManager:
     
     def update_labels(self):
         # Update labels with file size, downloaded bytes, and remaining bytes
-        self.total_size_label.config(text=f"Total Size: {self.total_size} bytes")
-        self.downloaded_label.config(text=f"Downloaded: {self.downloaded_bytes} bytes")
+        formatted_total_size = "{:,}".format(self.total_size)
+        self.total_size_label.config(text=f"Total Size: {formatted_total_size} bytes")
+        formatted_downloaded_bytes = "{:,}".format(self.downloaded_bytes)
+        self.downloaded_label.config(text=f"Downloaded: {formatted_downloaded_bytes} bytes")
         remaining_bytes = max(self.total_size - self.downloaded_bytes, 0)
-        self.remaining_label.config(text=f"Remaining: {remaining_bytes} bytes")
+        formatted_remaining_bytes = "{:,}".format(remaining_bytes)
+        self.remaining_label.config(text=f"Remaining: {formatted_remaining_bytes} bytes")
         
         # Calculate download speed
         current_time = time.time()
