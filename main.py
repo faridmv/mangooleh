@@ -149,7 +149,7 @@ class DownloadManager:
 
 def main():
     root = tk.Tk()
-    root.title("Download Manager")
+    root.title("Mangooleh - Download Manager")
 
     manager = DownloadManager(root)
     manager.create_widgets()
