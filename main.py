@@ -37,7 +37,7 @@ class DownloadManager:
         self.remaining_time_label = None
         
         self.default_num_chunks = 4
-        self.default_chunk_size = 1024
+        self.default_chunk_size = 65536
         
         # Initialize start time
         self.start_time = time.time()
@@ -152,7 +152,7 @@ class DownloadManager:
             self.total_size = int(response.headers.get('content-length', 0))
             with open(output_file, 'wb') as f:
                 self.downloaded_bytes = 0
-                for chunk in response.iter_content(chunk_size=1024):
+                for chunk in response.iter_content(chunk_size=self.default_chunk_size):
                     if chunk:
                         f.write(chunk)
                         self.downloaded_bytes += len(chunk)
