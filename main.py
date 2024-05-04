@@ -114,55 +114,55 @@ class DownloadManager:
         except Exception as e:
             print(f"Error occurred: {e}")
 
-    #===========================================================================
-    # def download_file(self, url):
-    #     try:
-    #         response = requests.head(url)
-    #         self.total_size = int(response.headers.get('content-length', 0))
-    #         chunk_size = (self.total_size + self.default_num_chunks - 1) // self.default_num_chunks
-    # 
-    #         with open(self.output_file_entry.get(), 'wb') as f:
-    #             start_byte = 0
-    #             for _ in range(self.default_num_chunks):
-    #                 end_byte = min(start_byte + chunk_size - 1, self.total_size - 1)
-    #                 headers = {'Range': f'bytes={start_byte}-{end_byte}'}
-    #                 response = requests.get(url, headers=headers, stream=True)
-    #                 for chunk in response.iter_content(chunk_size=self.default_chunk_size):
-    #                     if chunk:
-    #                         f.write(chunk)
-    #                         self.downloaded_bytes += len(chunk)
-    #                         self.progress_bar["value"] += len(chunk) * 100 / self.total_size
-    #                         self.update_labels()
-    #                         self.root.update_idletasks()  # Update the GUI
-    #                 start_byte = end_byte + 1
-    # 
-    #         messagebox.showinfo("Download Manager", "Download completed.")
-    #     except Exception as e:
-    #         messagebox.showerror("Download Manager", f"Error occurred: {e}")
-    #     finally:
-    #         self.download_button.config(state=tk.NORMAL)  # Re-enable the download button
-    #===========================================================================
-    
-    def download_file(self):
-        url = self.url_entry.get()
-        output_file = self.output_file_entry.get()
-    
+    def download_file(self, url):
         try:
-            response = requests.get(url, stream=True)
+            response = requests.head(url)
             self.total_size = int(response.headers.get('content-length', 0))
-            with open(output_file, 'wb') as f:
-                self.downloaded_bytes = 0
-                for chunk in response.iter_content(chunk_size=self.default_chunk_size):
-                    if chunk:
-                        f.write(chunk)
-                        self.downloaded_bytes += len(chunk)
-                        progress = (self.downloaded_bytes / self.total_size) * 100
-                        self.progress_bar["value"] = progress
-                        self.root.update_idletasks()  # Update the GUI
-                        self.update_labels()
+            chunk_size = (self.total_size + self.default_num_chunks - 1) // self.default_num_chunks
+     
+            with open(self.output_file_entry.get(), 'wb') as f:
+                start_byte = 0
+                for _ in range(self.default_num_chunks):
+                    end_byte = min(start_byte + chunk_size - 1, self.total_size - 1)
+                    headers = {'Range': f'bytes={start_byte}-{end_byte}'}
+                    response = requests.get(url, headers=headers, stream=True)
+                    for chunk in response.iter_content(chunk_size=self.default_chunk_size):
+                        if chunk:
+                            f.write(chunk)
+                            self.downloaded_bytes += len(chunk)
+                            self.progress_bar["value"] += len(chunk) * 100 / self.total_size
+                            self.update_labels()
+                            self.root.update_idletasks()  # Update the GUI
+                    start_byte = end_byte + 1
+     
             messagebox.showinfo("Download Manager", "Download completed.")
         except Exception as e:
             messagebox.showerror("Download Manager", f"Error occurred: {e}")
+        finally:
+            self.download_button.config(state=tk.NORMAL)  # Re-enable the download button
+    
+    #===========================================================================
+    # def download_file(self):
+    #     url = self.url_entry.get()
+    #     output_file = self.output_file_entry.get()
+    # 
+    #     try:
+    #         response = requests.get(url, stream=True)
+    #         self.total_size = int(response.headers.get('content-length', 0))
+    #         with open(output_file, 'wb') as f:
+    #             self.downloaded_bytes = 0
+    #             for chunk in response.iter_content(chunk_size=self.default_chunk_size):
+    #                 if chunk:
+    #                     f.write(chunk)
+    #                     self.downloaded_bytes += len(chunk)
+    #                     progress = (self.downloaded_bytes / self.total_size) * 100
+    #                     self.progress_bar["value"] = progress
+    #                     self.root.update_idletasks()  # Update the GUI
+    #                     self.update_labels()
+    #         messagebox.showinfo("Download Manager", "Download completed.")
+    #     except Exception as e:
+    #         messagebox.showerror("Download Manager", f"Error occurred: {e}")
+    #===========================================================================
 
     def start_download(self):
         url = self.url_entry.get()
